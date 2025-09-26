@@ -115,10 +115,10 @@
             <h3 style="margin: 0 0 15px 0; font-size: 16px;">3D Terrain View</h3>
             
             <div class="control-group">
-                <p style="margin: 5px 0; font-size: 11px;">High-contrast Hong Kong mountains</p>
-                <p style="margin: 5px 0; font-size: 11px;">Centered on Tai Mo Shan peak</p>
-                <p style="margin: 5px 0; font-size: 11px;">Resolution: 120×120 grid</p>
-                <p style="margin: 5px 0; font-size: 11px;">Scale: 70m per unit</p>
+                <p style="margin: 5px 0; font-size: 11px;">Extreme contrast Hong Kong mountains</p>
+                <p style="margin: 5px 0; font-size: 11px;">Centered on Tai Mo Shan peak (4000m)</p>
+                <p style="margin: 5px 0; font-size: 11px;">Resolution: 512×512 grid</p>
+                <p style="margin: 5px 0; font-size: 11px;">14,000+ plants, dense grass coverage</p>
             </div>
         </div>
         
@@ -148,11 +148,11 @@
         let frameCount = 0;
         let lastTime = Date.now();
         
-        // Terrain parameters - reduced for better performance
-        const TERRAIN_WIDTH = 120;
-        const TERRAIN_HEIGHT = 120;
-        const TERRAIN_SCALE = 70; // meters per pixel
-        const MAX_ELEVATION = 1200; // Increased for better contrast
+        // Terrain parameters - ultra high resolution
+        const TERRAIN_WIDTH = 512;
+        const TERRAIN_HEIGHT = 512;
+        const TERRAIN_SCALE = 25; // meters per pixel (ultra high resolution)
+        const MAX_ELEVATION = 4000; // Much higher for extreme dramatic contrast
         
         // Generate synthetic Hong Kong mountain terrain data with higher contrast
         function generateTerrainData() {
@@ -169,35 +169,45 @@
                     const dy = (y - centerY) / TERRAIN_HEIGHT;
                     const distFromCenter = Math.sqrt(dx * dx + dy * dy);
                     
-                    // Create mountain with multiple peaks - higher contrast
+                    // Create mountain with multiple peaks - much higher contrast
                     let elevation = 0;
                     
-                    // Main peak (Tai Mo Shan) - much higher
-                    elevation += 1200 * Math.exp(-distFromCenter * 6);
+                    // Main peak (Tai Mo Shan) - extremely high
+                    elevation += 4000 * Math.exp(-distFromCenter * 3.5);
                     
-                    // Secondary peaks - more pronounced
-                    elevation += 500 * Math.exp(-Math.pow((x - centerX * 0.7) / 25, 2) - Math.pow((y - centerY * 1.2) / 25, 2));
-                    elevation += 400 * Math.exp(-Math.pow((x - centerX * 1.3) / 30, 2) - Math.pow((y - centerY * 0.8) / 20, 2));
+                    // Secondary peaks - much more pronounced
+                    elevation += 2000 * Math.exp(-Math.pow((x - centerX * 0.7) / 35, 2) - Math.pow((y - centerY * 1.2) / 35, 2));
+                    elevation += 1800 * Math.exp(-Math.pow((x - centerX * 1.3) / 40, 2) - Math.pow((y - centerY * 0.8) / 30, 2));
+                    elevation += 1500 * Math.exp(-Math.pow((x - centerX * 0.4) / 25, 2) - Math.pow((y - centerY * 0.5) / 25, 2));
                     
-                    // Add dramatic ridges and deep valleys
-                    const ridge1 = 200 * Math.exp(-Math.pow((x - centerX * 0.5) / 15, 2)) * Math.cos((y - centerY) * 0.15);
-                    const ridge2 = 150 * Math.exp(-Math.pow((y - centerY * 1.1) / 20, 2)) * Math.sin((x - centerX) * 0.12);
+                    // Add dramatic ridges and deep valleys with more detail
+                    const ridge1 = 800 * Math.exp(-Math.pow((x - centerX * 0.5) / 20, 2)) * Math.cos((y - centerY) * 0.1);
+                    const ridge2 = 700 * Math.exp(-Math.pow((y - centerY * 1.1) / 25, 2)) * Math.sin((x - centerX) * 0.08);
+                    const ridge3 = 600 * Math.exp(-Math.pow((x - centerX * 1.2) / 18, 2)) * Math.cos((y - centerY * 0.8) * 0.12);
                     
-                    elevation += ridge1 + ridge2;
+                    elevation += ridge1 + ridge2 + ridge3;
                     
-                    // Create valleys (negative elevation areas)
-                    const valley1 = -100 * Math.exp(-Math.pow((x - centerX * 0.3) / 15, 2) - Math.pow((y - centerY * 0.6) / 15, 2));
-                    const valley2 = -80 * Math.exp(-Math.pow((x - centerX * 1.5) / 12, 2) - Math.pow((y - centerY * 1.4) / 12, 2));
+                    // Create much deeper valleys (negative elevation areas)
+                    const valley1 = -400 * Math.exp(-Math.pow((x - centerX * 0.3) / 20, 2) - Math.pow((y - centerY * 0.6) / 20, 2));
+                    const valley2 = -350 * Math.exp(-Math.pow((x - centerX * 1.5) / 15, 2) - Math.pow((y - centerY * 1.4) / 15, 2));
+                    const valley3 = -300 * Math.exp(-Math.pow((x - centerX * 0.8) / 12, 2) - Math.pow((y - centerY * 1.6) / 18, 2));
                     
-                    elevation += valley1 + valley2;
+                    elevation += valley1 + valley2 + valley3;
                     
-                    // Ensure minimum elevation
-                    elevation = Math.max(-50, elevation);
+                    // Add more surface detail for realistic terrain texture
+                    const detailNoise1 = 40 * (Math.sin(x * 0.3) * Math.cos(y * 0.3));
+                    const detailNoise2 = 25 * (Math.sin(x * 0.6) * Math.cos(y * 0.5));
+                    const detailNoise3 = 15 * (Math.sin(x * 1.2) * Math.cos(y * 0.8));
+                    const detailNoise4 = 8 * (Math.sin(x * 2.0) * Math.cos(y * 1.5));
+                    elevation += detailNoise1 + detailNoise2 + detailNoise3 + detailNoise4;
                     
-                    // Less edge smoothing for more dramatic terrain
+                    // Ensure minimum elevation with much deeper valleys
+                    elevation = Math.max(-300, elevation);
+                    
+                    // Minimal edge smoothing for more dramatic terrain
                     const edgeFactor = Math.min(
-                        Math.min(x / 10, (TERRAIN_WIDTH - x) / 10),
-                        Math.min(y / 10, (TERRAIN_HEIGHT - y) / 10)
+                        Math.min(x / 15, (TERRAIN_WIDTH - x) / 15),
+                        Math.min(y / 15, (TERRAIN_HEIGHT - y) / 15)
                     );
                     elevation *= Math.min(1, edgeFactor);
                     
@@ -214,36 +224,49 @@
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x87CEEB); // Sky blue
             
-            // Create camera
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-            camera.position.set(3000, 2000, 3000);
+            // Create camera - positioned higher to see the dramatic peaks
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 15000);
+            camera.position.set(4000, 3500, 4000);
             
-            // Create renderer
+            // Create renderer with enhanced settings
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.setPixelRatio(window.devicePixelRatio);
             document.getElementById('container').appendChild(renderer.domElement);
             
-            // Create controls
+            // Create controls with wider range for high terrain
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.screenSpacePanning = false;
-            controls.minDistance = 500;
-            controls.maxDistance = 8000;
+            controls.minDistance = 800;
+            controls.maxDistance = 12000;
             controls.maxPolarAngle = Math.PI / 2;
             
-            // Add lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            // Add enhanced lighting for vegetation
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.7);
             scene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(1000, 2000, 1000);
+            // Main sun light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+            directionalLight.position.set(1500, 3000, 1500);
             directionalLight.castShadow = true;
-            directionalLight.shadow.mapSize.width = 2048;
-            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.mapSize.width = 4096;
+            directionalLight.shadow.mapSize.height = 4096;
+            directionalLight.shadow.camera.near = 0.5;
+            directionalLight.shadow.camera.far = 10000;
+            directionalLight.shadow.camera.left = -5000;
+            directionalLight.shadow.camera.right = 5000;
+            directionalLight.shadow.camera.top = 5000;
+            directionalLight.shadow.camera.bottom = -5000;
             scene.add(directionalLight);
+            
+            // Secondary fill light for vegetation
+            const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3);
+            fillLight.position.set(-1000, 1500, -1000);
+            scene.add(fillLight);
             
             // Initialize terrain
             initTerrain();
@@ -340,6 +363,120 @@
             terrainMesh.rotation.x = -Math.PI / 2;
             terrainMesh.receiveShadow = true;
             scene.add(terrainMesh);
+            
+            // Add vegetation to the terrain
+            addVegetation();
+        }
+        
+        // Add dense vegetation to the terrain
+        function addVegetation() {
+            const terrainData = generateTerrainData();
+            const vegetationGroup = new THREE.Group();
+            
+            // Create different types of vegetation - much larger
+            const treeGeometry = new THREE.ConeGeometry(20, 60, 8);
+            const bushGeometry = new THREE.SphereGeometry(15, 10, 8);
+            const grassGeometry = new THREE.ConeGeometry(4, 12, 6);
+            
+            // Materials for different vegetation
+            const treeMaterial = new THREE.MeshLambertMaterial({ color: 0x0d4f0d });
+            const bushMaterial = new THREE.MeshLambertMaterial({ color: 0x228b22 });
+            const grassMaterial = new THREE.MeshLambertMaterial({ color: 0x32cd32 });
+            const lightGrassMaterial = new THREE.MeshLambertMaterial({ color: 0x90ee90 });
+            
+            // First, add dense grass coverage across suitable terrain
+            for (let i = 0; i < 8000; i++) {
+                const x = Math.random() * TERRAIN_WIDTH;
+                const y = Math.random() * TERRAIN_HEIGHT;
+                const terrainIndex = Math.floor(y) * TERRAIN_WIDTH + Math.floor(x);
+                const elevation = terrainData[terrainIndex];
+                
+                // Dense grass coverage at suitable elevations
+                if (elevation > 0 && elevation < 1500) {
+                    const worldX = (x - TERRAIN_WIDTH/2) * TERRAIN_SCALE;
+                    const worldZ = (y - TERRAIN_HEIGHT/2) * TERRAIN_SCALE;
+                    const worldY = elevation;
+                    
+                    const grass = new THREE.Mesh(grassGeometry, Math.random() < 0.5 ? grassMaterial : lightGrassMaterial);
+                    grass.position.set(worldX, worldY, worldZ);
+                    grass.rotation.y = Math.random() * Math.PI * 2;
+                    const grassScale = 0.8 + Math.random() * 0.6;
+                    grass.scale.set(grassScale, grassScale, grassScale);
+                    grass.castShadow = true;
+                    vegetationGroup.add(grass);
+                }
+            }
+            
+            // Then add larger trees and bushes
+            for (let i = 0; i < 6000; i++) {
+                const x = Math.random() * TERRAIN_WIDTH;
+                const y = Math.random() * TERRAIN_HEIGHT;
+                const terrainIndex = Math.floor(y) * TERRAIN_WIDTH + Math.floor(x);
+                const elevation = terrainData[terrainIndex];
+                
+                // Only place larger vegetation at suitable elevations
+                if (elevation > 50 && elevation < 2000) {
+                    const worldX = (x - TERRAIN_WIDTH/2) * TERRAIN_SCALE;
+                    const worldZ = (y - TERRAIN_HEIGHT/2) * TERRAIN_SCALE;
+                    const worldY = elevation;
+                    
+                    let vegetation;
+                    let material;
+                    let geometry;
+                    
+                    // Choose vegetation type based on elevation - more trees and bushes
+                    if (elevation < 300) {
+                        // Mixed vegetation in lowlands
+                        const rand = Math.random();
+                        if (rand < 0.5) {
+                            geometry = treeGeometry;
+                            material = treeMaterial;
+                        } else {
+                            geometry = bushGeometry;
+                            material = bushMaterial;
+                        }
+                    } else if (elevation < 800) {
+                        // Dense forest
+                        const rand = Math.random();
+                        if (rand < 0.7) {
+                            geometry = treeGeometry;
+                            material = treeMaterial;
+                        } else {
+                            geometry = bushGeometry;
+                            material = bushMaterial;
+                        }
+                    } else if (elevation < 1500) {
+                        // Medium elevation - still lots of trees
+                        const rand = Math.random();
+                        if (rand < 0.6) {
+                            geometry = treeGeometry;
+                            material = treeMaterial;
+                        } else if (rand < 0.9) {
+                            geometry = bushGeometry;
+                            material = bushMaterial;
+                        } else continue;
+                    } else {
+                        // High elevation - sparse bushes
+                        if (Math.random() < 0.4) {
+                            geometry = bushGeometry;
+                            material = bushMaterial;
+                        } else continue;
+                    }
+                    
+                    vegetation = new THREE.Mesh(geometry, material);
+                    vegetation.position.set(worldX, worldY, worldZ);
+                    
+                    // Add some random rotation and larger scale variation
+                    vegetation.rotation.y = Math.random() * Math.PI * 2;
+                    const scale = 0.8 + Math.random() * 1.2; // Larger scale range
+                    vegetation.scale.set(scale, scale, scale);
+                    
+                    vegetation.castShadow = true;
+                    vegetationGroup.add(vegetation);
+                }
+            }
+            
+            scene.add(vegetationGroup);
         }
         
         // Create reveal texture (fully revealed terrain)
@@ -378,44 +515,60 @@
                 const elevation = terrainData[i];
                 const pixelIndex = i * 4;
                 
-                // High contrast color based on elevation
+                // Ultra high contrast color based on elevation
                 let r, g, b;
-                if (elevation < -20) {
+                if (elevation < -100) {
+                    // Deep valleys - very dark blue/purple
+                    r = 0.02 * 255; g = 0.05 * 255; b = 0.3 * 255;
+                } else if (elevation < -20) {
                     // Deep water - dark blue
-                    r = 0.05 * 255; g = 0.1 * 255; b = 0.4 * 255;
-                } else if (elevation < 20) {
+                    const t = (elevation + 100) / 80;
+                    r = (0.02 + t * 0.03) * 255; g = (0.05 + t * 0.05) * 255; b = (0.3 + t * 0.1) * 255;
+                } else if (elevation < 50) {
                     // Shallow water/beach - blue to sand
-                    const t = (elevation + 20) / 40;
+                    const t = (elevation + 20) / 70;
                     r = (0.05 + t * 0.85) * 255; 
                     g = (0.1 + t * 0.7) * 255; 
                     b = (0.4 + t * 0.2) * 255;
-                } else if (elevation < 100) {
-                    // Beach to grassland - sand to bright green
-                    const t = (elevation - 20) / 80;
+                } else if (elevation < 200) {
+                    // Lowlands - sand to bright green
+                    const t = (elevation - 50) / 150;
                     r = (0.9 - t * 0.7) * 255; 
                     g = (0.8 + t * 0.1) * 255; 
                     b = (0.6 - t * 0.4) * 255;
-                } else if (elevation < 300) {
+                } else if (elevation < 500) {
                     // Grassland - bright green
                     r = 0.1 * 255; g = 0.9 * 255; b = 0.1 * 255;
-                } else if (elevation < 600) {
+                } else if (elevation < 1000) {
                     // Forest to mountain - dark green to brown
-                    const t = (elevation - 300) / 300;
+                    const t = (elevation - 500) / 500;
                     r = (0.1 + t * 0.4) * 255; 
                     g = (0.9 - t * 0.5) * 255; 
                     b = (0.1 + t * 0.0) * 255;
-                } else if (elevation < 900) {
+                } else if (elevation < 1500) {
                     // Mountain - brown to grey
-                    const t = (elevation - 600) / 300;
+                    const t = (elevation - 1000) / 500;
                     r = (0.5 + t * 0.2) * 255; 
                     g = (0.4 + t * 0.3) * 255; 
                     b = (0.1 + t * 0.6) * 255;
+                } else if (elevation < 2500) {
+                    // High mountain - grey to white
+                    const t = (elevation - 1500) / 1000;
+                    r = (0.7 + t * 0.2) * 255; 
+                    g = (0.7 + t * 0.2) * 255; 
+                    b = (0.7 + t * 0.2) * 255;
+                } else if (elevation < 3500) {
+                    // Very high peaks - white with slight blue
+                    const t = (elevation - 2500) / 1000;
+                    r = (0.9 + t * 0.05) * 255; 
+                    g = (0.95 + t * 0.03) * 255; 
+                    b = (0.98 + t * 0.02) * 255;
                 } else {
-                    // High peaks - bright white
-                    const t = Math.min((elevation - 900) / 300, 1.0);
-                    r = (0.7 + t * 0.3) * 255; 
-                    g = (0.7 + t * 0.3) * 255; 
-                    b = (0.7 + t * 0.3) * 255;
+                    // Extreme peaks - brilliant white with snow
+                    const t = Math.min((elevation - 3500) / 500, 1.0);
+                    r = (0.95 + t * 0.05) * 255; 
+                    g = (0.98 + t * 0.02) * 255; 
+                    b = (1.0) * 255;
                 }
                 
                 imageData.data[pixelIndex] = r;
